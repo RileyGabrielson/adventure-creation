@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react";
-import { ObservableValue } from "../../hex/observable_value";
-import { getRandomId } from "../../hex/random_id";
+import { ObservableValue } from "../../common/hex/observable_value";
+import { getRandomId } from "../../common/utils/random_id";
 
 const updateReducer = (num: number): number => (num + 1) % 1_000_000;
 

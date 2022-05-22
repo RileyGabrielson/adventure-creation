@@ -1,4 +1,4 @@
-import { ObservableValue } from "../../hex/observable_value";
+import { ObservableValue } from "../../common/hex/observable_value";
 import { CreateConnectionAction, NetworkAction } from "./network_action";
 
 export interface NetworkNode {
