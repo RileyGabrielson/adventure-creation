@@ -1,24 +1,42 @@
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, useState } from "react";
+import { clsx } from "../../common/styles/clsx";
+import { makeStyles } from "../../common/hooks/make_styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    borderRadius: theme.borderRadius,
+    backgroundColor: theme.palette.secondary,
+    padding: theme.spacing(1),
+    color: theme.palette.text,
+  },
+  hoverRoot: {
+    boxShadow: `0px 0px 8px 1px rgba(0,0,0,0.6)`,
+    textDecoration: "underline",
+  },
+  text: {
+    fontSize: "18px",
+    color: "inherit",
+  },
+}));
 
 interface ButtonProps {
-  children?: React.ReactNode;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   style?: CSSProperties;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  children: React.ReactNode;
 }
 
-const defaultStyle: CSSProperties = {
-  width: "150px",
-  height: "45px",
-  fontSize: "18px",
-  backgroundColor: "blue",
-  color: "white",
-  borderRadius: "8px",
-};
+export const Button = ({ style, onClick, children }: ButtonProps) => {
+  const styles = useStyles();
+  const [isHover, setHover] = useState(false);
 
-export const Button = ({ children, onClick, style }: ButtonProps) => {
   return (
-    <button style={{ ...defaultStyle, ...style }} onClick={onClick}>
-      {children}
+    <button
+      style={clsx(styles.root, isHover && styles.hoverRoot, style)}
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      <div style={styles.text}>{children}</div>
     </button>
   );
 };

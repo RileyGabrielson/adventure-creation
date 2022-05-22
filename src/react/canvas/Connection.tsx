@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCanvasDomain } from "../../providers/canvas_domain_provider";
-import { useAsyncValue } from "../hooks/use_async_value";
+import { useAsyncValue } from "../../common/hooks/use_async_value";
 
 interface ConnectionProps {
   idFirst: string;
@@ -38,7 +38,6 @@ export const Connection = ({ idFirst, idSecond }: ConnectionProps) => {
         strokeWidth={lastClicked || isHighlighted ? 3 : 1}
         onMouseEnter={() => setIsHighlighted(true)}
         onMouseLeave={() => setIsHighlighted(false)}
-        style={{ zIndex: 1800 }}
       />
       test
     </>

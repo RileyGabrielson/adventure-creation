@@ -1,11 +1,14 @@
-import React, { CSSProperties, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useCanvasDomain } from "../../providers/canvas_domain_provider";
-import { useAsyncValue } from "../hooks/use_async_value";
+import { useAsyncValue } from "../../common/hooks/use_async_value";
+import { makeStyles } from "../../common/hooks/make_styles";
 
-const style: CSSProperties = {
-  position: "absolute",
-  cursor: "pointer",
-};
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: "absolute",
+    cursor: "pointer",
+  },
+}));
 
 export interface DraggableProps {
   children: React.ReactNode;
@@ -15,6 +18,7 @@ export interface DraggableProps {
 
 export const Draggable = ({ children, initialPos, id }: DraggableProps) => {
   const domain = useCanvasDomain();
+  const styles = useStyles();
   const ref = useRef<HTMLDivElement | null>(null);
   const draggable = useAsyncValue(domain.draggableComponents).find(
     (v) => v.id === id
@@ -38,7 +42,7 @@ export const Draggable = ({ children, initialPos, id }: DraggableProps) => {
   return (
     <div
       ref={ref}
-      style={{ ...style, top: pos.y, left: pos.x, zIndex: zIndex }}
+      style={{ ...styles.root, top: pos.y, left: pos.x, zIndex: zIndex }}
       onMouseDown={(e) => {
         const mousePos = { x: e.pageX, y: e.pageY };
         domain.handleMouseDown(id, mousePos);

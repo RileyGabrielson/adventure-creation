@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { NetworkDomain } from "../domain/network_domain/network_domain";
-import makeContextHook from "../react/hooks/make_context_hook";
+import makeContextHook from "../common/hooks/make_context_hook";
 
 const networkDomainContext = createContext<NetworkDomain | undefined>(
   undefined

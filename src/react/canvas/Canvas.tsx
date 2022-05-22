@@ -1,15 +1,18 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import CanvasDomainProvider, {
   useCanvasDomain,
 } from "../../providers/canvas_domain_provider";
-import { useAsyncValue } from "../hooks/use_async_value";
+import { useAsyncValue } from "../../common/hooks/use_async_value";
+import { makeStyles } from "../../common/hooks/make_styles";
 
-const style: CSSProperties = {
-  width: "100vw",
-  height: "100vh",
-  position: "relative",
-  overflow: "hidden",
-};
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100vw",
+    height: "100vh",
+    position: "relative",
+    overflow: "hidden",
+  },
+}));
 
 interface CanvasProps {
   children: React.ReactNode;
@@ -24,6 +27,7 @@ export const Canvas = (props: CanvasProps) => {
 };
 
 const CanvasContent = ({ children }: CanvasProps) => {
+  const styles = useStyles();
   const domain = useCanvasDomain();
   const activeComponent = useAsyncValue(domain.draggableComponents).find(
     (v) => v.isActive
@@ -38,7 +42,7 @@ const CanvasContent = ({ children }: CanvasProps) => {
           domain.handleMouseMove(activeComponent.id, mousePos);
         }
       }}
-      style={style}
+      style={styles.root}
     >
       {children}
     </div>
