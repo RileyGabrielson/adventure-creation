@@ -64,6 +64,18 @@ export class AdventureEditorDomain {
     this.curAction?.onSelectMoment(moment);
   }
 
+  setMomentTitle(id: string, title: string) {
+    const moment = this.moments.getValue().find((m) => m.id === id);
+    if (moment) moment.title = title;
+    this.moments.setValue(this.moments.getValue());
+  }
+
+  setMomentDescription(id: string, description: string) {
+    const moment = this.moments.getValue().find((m) => m.id === id);
+    if (moment) moment.description = description;
+    this.moments.setValue(this.moments.getValue());
+  }
+
   dispose() {
     this.moments.dispose();
   }

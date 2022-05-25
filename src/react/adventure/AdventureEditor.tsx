@@ -38,10 +38,9 @@ const AdventureEditorContent = () => {
       style={styles.button}
       onClick={() =>
         domain.addMoment({
+          title: "New Moment",
           id: getRandomId(),
-          title: getRandomId(),
-          description:
-            "test again ;aldsksdjf;klajsdfja;lskdjf;ldfl;addfddddddddddddddddddd dddddddddddddddddddddddddddddddddddd",
+          description: "New Description",
           choices: [],
         })
       }

@@ -24,6 +24,8 @@ interface MomentMenuProps {
   onClose?: () => void;
   onEdit?: () => void;
   isOpen?: boolean;
+  isEdit?: boolean;
+  onSaveEdit?: () => void;
   moment: Moment;
 }
 
@@ -53,6 +55,8 @@ export const MomentMenu = ({
   onEdit,
   onClose,
   isOpen,
+  isEdit,
+  onSaveEdit,
   moment,
 }: MomentMenuProps) => {
   const domain = useAdventureEditorDomain();
@@ -61,24 +65,37 @@ export const MomentMenu = ({
 
   return (
     <div style={styles.menu} ref={ref}>
-      <Button
-        onClick={(e) => {
-          onEdit && onEdit();
-          onClose && onClose();
-          e.stopPropagation();
-        }}
-      >
-        Edit
-      </Button>
-      <Button
-        onClick={(e) => {
-          domain.startCreateChoice(moment);
-          onClose && onClose();
-          e.stopPropagation();
-        }}
-      >
-        Create Connection
-      </Button>
+      {!isEdit ? (
+        <>
+          <Button
+            onClick={(e) => {
+              onEdit && onEdit();
+              e.stopPropagation();
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={(e) => {
+              domain.startCreateChoice(moment);
+              onClose && onClose();
+              e.stopPropagation();
+            }}
+          >
+            Create Connection
+          </Button>
+        </>
+      ) : (
+        <Button
+          onClick={(e) => {
+            onSaveEdit && onSaveEdit();
+            onClose && onClose();
+            e.stopPropagation();
+          }}
+        >
+          Save
+        </Button>
+      )}
     </div>
   );
 };

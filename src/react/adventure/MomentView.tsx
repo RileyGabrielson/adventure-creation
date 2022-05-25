@@ -61,31 +61,40 @@ export const MomentView = ({ moment }: MomentViewProps) => {
           <div style={clsx(styles.textAreas, styles.description)}>
             {moment.description}
           </div>
-          <MomentMenu
-            onEdit={() => setIsEdit(true)}
-            onClose={() => setOpenMenu(false)}
-            isOpen={openMenu}
-            moment={moment}
-          />
         </>
       )}
+      <MomentMenu
+        onEdit={() => setIsEdit(true)}
+        onClose={() => setOpenMenu(false)}
+        isOpen={openMenu}
+        isEdit={isEdit}
+        onSaveEdit={() => setIsEdit(false)}
+        moment={moment}
+      />
     </div>
   );
 };
 
 const EditView = ({ moment }: MomentViewProps) => {
   const styles = useStyles();
-  const [openMenu, setOpenMenu] = useState(false);
   const domain = useAdventureEditorDomain();
 
-  //TODO: update domain to set title and description
   return (
     <>
       <input
-        value={moment.title}
+        onChange={(e) => {
+          domain.setMomentTitle(moment.id, e.currentTarget.value);
+        }}
+        defaultValue={moment.title}
         style={clsx(styles.textAreas, styles.title)}
       />
-      <input style={clsx(styles.textAreas, styles.title)} />
+      <input
+        onChange={(e) => {
+          domain.setMomentDescription(moment.id, e.currentTarget.value);
+        }}
+        defaultValue={moment.description}
+        style={clsx(styles.textAreas, styles.title)}
+      />
     </>
   );
 };

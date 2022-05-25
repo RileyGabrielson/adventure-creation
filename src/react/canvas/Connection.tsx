@@ -24,15 +24,20 @@ export const Connection = ({
   const secondX =
     (second?.position.x ?? 0) + (second?.ref.current?.scrollWidth ?? 0) / 2;
 
-  const secondY = showDirection
-    ? (second?.position.y ?? 0) - (second?.ref.current?.scrollHeight ?? 0) / 6
-    : (second?.position.y ?? 0) + (second?.ref.current?.scrollHeight ?? 0) / 2;
+  const secondY =
+    (second?.position.y ?? 0) + (second?.ref.current?.scrollHeight ?? 0) / 2;
 
   const [isHighlighted, setIsHighlighted] = useState(false);
   const lastClickedComponent = draggables.find((d) => d.lastClicked === true);
   const lastClicked =
     lastClickedComponent?.id === idFirst ||
     lastClickedComponent?.id === idSecond;
+
+  const lastClickedStart = lastClickedComponent?.id === idFirst;
+
+  const isSelected = showDirection
+    ? lastClickedStart || isHighlighted
+    : lastClicked || isHighlighted;
 
   return (
     <>
@@ -41,8 +46,8 @@ export const Connection = ({
         x2={secondX}
         y1={firstY}
         y2={secondY}
-        stroke={lastClicked || isHighlighted ? "white" : "black"}
-        strokeWidth={lastClicked || isHighlighted ? 3 : 1}
+        stroke={isSelected ? "white" : "black"}
+        strokeWidth={isSelected ? 4 : 2}
         onMouseEnter={() => setIsHighlighted(true)}
         onMouseLeave={() => setIsHighlighted(false)}
       />
