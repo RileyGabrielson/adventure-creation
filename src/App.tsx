@@ -1,6 +1,6 @@
-import React, { CSSProperties } from "react";
+import React from "react";
 import { makeStyles } from "./common/hooks/make_styles";
-import { Network } from "./react/network/Network";
+import { AdventureEditor } from "./react/adventure/AdventureEditor";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,7 +15,7 @@ function App() {
   return (
     <div style={{ textAlign: "center" }}>
       <header style={styles.root}>
-        <Network />
+        <AdventureEditor />
       </header>
     </div>
   );

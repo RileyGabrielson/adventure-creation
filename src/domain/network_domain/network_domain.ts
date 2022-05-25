@@ -1,40 +1,44 @@
 import { ObservableValue } from "../../common/hex/observable_value";
-import { CreateConnectionAction, NetworkAction } from "./network_action";
 
-export interface NetworkNode {
+export interface NetworkNode<T> {
   id: string;
   label: string;
-  connections: NetworkNode[];
+  connectionIds: string[];
+  value: T;
 }
 
-interface Connection {
-  node1: NetworkNode;
-  node2: NetworkNode;
+interface Connection<T> {
+  node1: NetworkNode<T>;
+  node2: NetworkNode<T>;
 }
 
-export class NetworkDomain {
-  public nodes: ObservableValue<NetworkNode[]>;
-  public uniqueConnections: ObservableValue<Connection[]>;
+export class NetworkDomain<T> {
+  public nodes: ObservableValue<NetworkNode<T>[]>;
+  public uniqueConnections: ObservableValue<Connection<T>[]>;
   public instructionText: ObservableValue<string | null>;
-  private curAction: NetworkAction | null;
 
   constructor() {
-    this.nodes = new ObservableValue<NetworkNode[]>([]);
-    this.uniqueConnections = new ObservableValue<Connection[]>([]);
+    this.nodes = new ObservableValue<NetworkNode<T>[]>([]);
+    this.uniqueConnections = new ObservableValue<Connection<T>[]>([]);
     this.instructionText = new ObservableValue<string | null>(null);
-    this.curAction = null;
   }
 
   setInstructionText(message: string | null) {
     this.instructionText.setValue(message);
   }
 
-  addNode(newNode: NetworkNode) {
+  addNode(newNode: NetworkNode<T>) {
     this.nodes.transformValue((old) => [...old, newNode]);
+    console.log(this.nodes.getValue().length);
   }
 
   removeNode(id: string) {
-    this.nodes.transformValue((old) => old.filter((v) => v.id !== id));
+    const curNodes = this.nodes.getValue().filter((node) => node.id !== id);
+    curNodes.forEach((node) => {
+      node.connectionIds = node.connectionIds.filter(
+        (connectionId) => connectionId !== id
+      );
+    });
   }
 
   addConnection(id1: string, id2: string) {
@@ -44,9 +48,9 @@ export class NetworkDomain {
     if (
       first &&
       second &&
-      first.connections.find((c) => c.id === second.id) === undefined
+      first.connectionIds.find((c) => c === second.id) === undefined
     ) {
-      first.connections.push(second);
+      first.connectionIds.push(second.id);
     }
     this.nodes.setValue([...n]);
   }
@@ -56,23 +60,10 @@ export class NetworkDomain {
     const first = n.find((v) => v.id === id1);
     const second = n.find((v) => v.id === id2);
     if (first && second) {
-      first.connections = first.connections.filter((v) => v.id !== id2);
-      second.connections = second.connections.filter((v) => v.id !== id1);
+      first.connectionIds = first.connectionIds.filter((v) => v !== id2);
+      second.connectionIds = second.connectionIds.filter((v) => v !== id1);
     }
     this.nodes.setValue([...n]);
-  }
-
-  clearCurAction() {
-    this.curAction = null;
-  }
-
-  startCreateConnection(id: string) {
-    this.curAction = new CreateConnectionAction(this);
-    this.onSelectNode(id);
-  }
-
-  onSelectNode(id: string) {
-    this.curAction?.onSelectNode(id);
   }
 
   dispose() {

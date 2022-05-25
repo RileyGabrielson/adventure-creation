@@ -27,15 +27,20 @@ export class CanvasDomain {
   registerDraggable(
     newComponent: Omit<Draggable, "zIndex" | "lastClicked" | "isActive">
   ) {
-    this.draggableComponents.transformValue((old) => [
-      ...old,
-      {
-        ...newComponent,
-        zIndex: old.length,
-        isActive: false,
-        lastClicked: false,
-      },
-    ]);
+    if (
+      !this.draggableComponents
+        .getValue()
+        .find((draggable) => draggable.id === newComponent.id)
+    )
+      this.draggableComponents.transformValue((old) => [
+        ...old,
+        {
+          ...newComponent,
+          zIndex: old.length,
+          isActive: false,
+          lastClicked: false,
+        },
+      ]);
   }
 
   removeDraggable(id: string) {

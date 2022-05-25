@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useCanvasDomain } from "../../providers/canvas_domain_provider";
-import { useNetworkDomain } from "../../providers/network_domain_provider";
-import { Draggable, DraggableProps } from "../canvas/Draggable";
-import { Button } from "../common/Button";
 import { useAsyncValue } from "../../common/hooks/use_async_value";
-import { NodeMenu } from "./NodeMenu";
 import { makeStyles } from "../../common/hooks/make_styles";
 
-interface NodeProps extends Omit<DraggableProps, "children" | "initialPos"> {
+interface NodeProps {
   label: string;
+  id: string;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -43,9 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const NodeView = ({ label, id, ...props }: NodeProps) => {
-  const [openMenu, setOpenMenu] = useState(false);
-  const domain = useNetworkDomain();
+export const DefaultNodeView = ({ label, id, ...props }: NodeProps) => {
   const canvasDomain = useCanvasDomain();
   const styles = useStyles();
   const lastClicked =
@@ -53,31 +48,12 @@ export const NodeView = ({ label, id, ...props }: NodeProps) => {
       ?.lastClicked ?? false;
 
   return (
-    <Draggable id={id} {...props}>
-      <div
-        onClick={() => domain.onSelectNode(id)}
-        style={
-          lastClicked ? { ...styles.root, ...styles.lastClicked } : styles.root
-        }
-      >
-        {label}
-        <NodeMenu
-          nodeId={id}
-          isOpen={openMenu}
-          onClose={() => {
-            setOpenMenu(false);
-          }}
-        />
-        <Button
-          onClick={(e) => {
-            setOpenMenu(!openMenu);
-            e.stopPropagation();
-          }}
-          style={styles.button}
-        >
-          +
-        </Button>
-      </div>
-    </Draggable>
+    <div
+      style={
+        lastClicked ? { ...styles.root, ...styles.lastClicked } : styles.root
+      }
+    >
+      {label}
+    </div>
   );
 };

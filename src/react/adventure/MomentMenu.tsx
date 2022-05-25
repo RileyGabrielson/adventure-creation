@@ -1,8 +1,9 @@
 import React from "react";
-import { useNetworkDomain } from "../../providers/network_domain_provider";
 import { Button } from "../common/Button";
 import { makeStyledTransition } from "react-motion-ux";
 import { makeStyles } from "../../common/hooks/make_styles";
+import { useAdventureEditorDomain } from "../../providers/adventure_editor_domain_provider";
+import { Moment } from "../../domain/adventure_domain/types";
 
 const useStyles = makeStyles((theme) => ({
   menu: {
@@ -13,16 +14,17 @@ const useStyles = makeStyles((theme) => ({
     alignContent: "center",
     gap: theme.spacing(1),
     position: "absolute",
-    top: 50,
-    width: 200,
+    top: `calc(100% + ${theme.spacing(1)})`,
+    width: "100%",
     zIndex: 1400,
   },
 }));
 
-interface NodeMenuProps {
+interface MomentMenuProps {
   onClose?: () => void;
+  onEdit?: () => void;
   isOpen?: boolean;
-  nodeId: string;
+  moment: Moment;
 }
 
 const useStyledTransition = makeStyledTransition<HTMLDivElement>(
@@ -44,11 +46,16 @@ const useStyledTransition = makeStyledTransition<HTMLDivElement>(
       transform: "scale(0)",
     },
   },
-  400
+  300
 );
 
-export const NodeMenu = ({ onClose, isOpen, nodeId }: NodeMenuProps) => {
-  const domain = useNetworkDomain();
+export const MomentMenu = ({
+  onEdit,
+  onClose,
+  isOpen,
+  moment,
+}: MomentMenuProps) => {
+  const domain = useAdventureEditorDomain();
   const ref = useStyledTransition(isOpen ? "visible" : "hidden");
   const styles = useStyles();
 
@@ -56,20 +63,21 @@ export const NodeMenu = ({ onClose, isOpen, nodeId }: NodeMenuProps) => {
     <div style={styles.menu} ref={ref}>
       <Button
         onClick={(e) => {
-          domain.startCreateConnection(nodeId);
+          onEdit && onEdit();
+          onClose && onClose();
+          e.stopPropagation();
+        }}
+      >
+        Edit
+      </Button>
+      <Button
+        onClick={(e) => {
+          domain.startCreateChoice(moment);
           onClose && onClose();
           e.stopPropagation();
         }}
       >
         Create Connection
-      </Button>
-      <Button
-        onClick={(e) => {
-          onClose && onClose();
-          e.stopPropagation();
-        }}
-      >
-        X
       </Button>
     </div>
   );

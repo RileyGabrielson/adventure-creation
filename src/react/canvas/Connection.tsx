@@ -5,9 +5,14 @@ import { useAsyncValue } from "../../common/hooks/use_async_value";
 interface ConnectionProps {
   idFirst: string;
   idSecond: string;
+  showDirection?: boolean;
 }
 
-export const Connection = ({ idFirst, idSecond }: ConnectionProps) => {
+export const Connection = ({
+  idFirst,
+  idSecond,
+  showDirection,
+}: ConnectionProps) => {
   const domain = useCanvasDomain();
   const draggables = useAsyncValue(domain.draggableComponents);
   const first = draggables.find((d) => d.id === idFirst);
@@ -15,11 +20,13 @@ export const Connection = ({ idFirst, idSecond }: ConnectionProps) => {
   const firstX =
     (first?.position.x ?? 0) + (first?.ref.current?.scrollWidth ?? 0) / 2;
   const firstY =
-    (first?.position.y ?? 0) - (first?.ref.current?.scrollHeight ?? 0) / 2;
+    (first?.position.y ?? 0) + (first?.ref.current?.scrollHeight ?? 0) / 2;
   const secondX =
     (second?.position.x ?? 0) + (second?.ref.current?.scrollWidth ?? 0) / 2;
-  const secondY =
-    (second?.position.y ?? 0) - (second?.ref.current?.scrollHeight ?? 0) / 2;
+
+  const secondY = showDirection
+    ? (second?.position.y ?? 0) - (second?.ref.current?.scrollHeight ?? 0) / 6
+    : (second?.position.y ?? 0) + (second?.ref.current?.scrollHeight ?? 0) / 2;
 
   const [isHighlighted, setIsHighlighted] = useState(false);
   const lastClickedComponent = draggables.find((d) => d.lastClicked === true);
