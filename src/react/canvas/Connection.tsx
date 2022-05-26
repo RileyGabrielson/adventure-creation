@@ -40,18 +40,15 @@ export const Connection = ({
     : lastClicked || isHighlighted;
 
   return (
-    <>
-      <line
-        x1={firstX}
-        x2={secondX}
-        y1={firstY}
-        y2={secondY}
-        stroke={isSelected ? "white" : "black"}
-        strokeWidth={isSelected ? 4 : 2}
-        onMouseEnter={() => setIsHighlighted(true)}
-        onMouseLeave={() => setIsHighlighted(false)}
-      />
-      test
-    </>
+    <line
+      x1={firstX}
+      x2={secondX}
+      y1={firstY}
+      y2={secondY}
+      stroke={isSelected ? "white" : "black"}
+      strokeWidth={isSelected ? 4 : 2}
+      onMouseEnter={() => setIsHighlighted(true)}
+      onMouseLeave={() => setIsHighlighted(false)}
+    />
   );
 };

@@ -1,20 +1,25 @@
 import React from "react";
 import { makeStyles } from "../../common/hooks/make_styles";
 import { getRandomId } from "../../common/utils/random_id";
-import { Moment } from "../../domain/adventure_domain/types";
+import { Choice, Moment } from "../../domain/adventure_domain/types";
 import { NetworkDomain } from "../../domain/network_domain/network_domain";
 import AdventureEditorDomainProvider, {
   useAdventureEditorDomain,
 } from "../../providers/adventure_editor_domain_provider";
 import { Button } from "../common/Button";
 import { Network } from "../network/Network";
+import { renderChoiceView } from "./ChoiceView";
 import { renderMomentView } from "./MomentView";
 
 export const AdventureEditor = () => {
-  const networkDomain = new NetworkDomain<Moment>();
+  const networkDomain = new NetworkDomain<Moment, Choice>();
   return (
     <AdventureEditorDomainProvider networkDomain={networkDomain}>
-      <Network domain={networkDomain} render={renderMomentView}>
+      <Network
+        domain={networkDomain}
+        renderNode={renderMomentView}
+        renderConnection={renderChoiceView}
+      >
         <AdventureEditorContent />
       </Network>
     </AdventureEditorDomainProvider>

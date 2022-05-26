@@ -1,25 +1,26 @@
 import { ObservableValue } from "../../common/hex/observable_value";
 
-export interface NetworkNode<T> {
+export interface NetworkNode<TNode> {
   id: string;
   label: string;
   connectionIds: string[];
-  value: T;
+  value: TNode;
 }
 
-interface Connection<T> {
-  node1: NetworkNode<T>;
-  node2: NetworkNode<T>;
+interface Connection<TConnection> {
+  value: TConnection;
+  idStart: string;
+  idEnd: string;
 }
 
-export class NetworkDomain<T> {
-  public nodes: ObservableValue<NetworkNode<T>[]>;
-  public uniqueConnections: ObservableValue<Connection<T>[]>;
+export class NetworkDomain<TNode, TConnection> {
+  public nodes: ObservableValue<NetworkNode<TNode>[]>;
+  public connections: ObservableValue<Connection<TConnection>[]>;
   public instructionText: ObservableValue<string | null>;
 
   constructor() {
-    this.nodes = new ObservableValue<NetworkNode<T>[]>([]);
-    this.uniqueConnections = new ObservableValue<Connection<T>[]>([]);
+    this.nodes = new ObservableValue<NetworkNode<TNode>[]>([]);
+    this.connections = new ObservableValue<Connection<TConnection>[]>([]);
     this.instructionText = new ObservableValue<string | null>(null);
   }
 
@@ -27,9 +28,8 @@ export class NetworkDomain<T> {
     this.instructionText.setValue(message);
   }
 
-  addNode(newNode: NetworkNode<T>) {
+  addNode(newNode: NetworkNode<TNode>) {
     this.nodes.transformValue((old) => [...old, newNode]);
-    console.log(this.nodes.getValue().length);
   }
 
   removeNode(id: string) {
@@ -41,10 +41,10 @@ export class NetworkDomain<T> {
     });
   }
 
-  addConnection(id1: string, id2: string) {
+  addConnection(idStart: string, idEnd: string, value: TConnection) {
     const n = this.nodes.getValue();
-    const first = n.find((v) => v.id === id1);
-    const second = n.find((v) => v.id === id2);
+    const first = n.find((v) => v.id === idStart);
+    const second = n.find((v) => v.id === idEnd);
     if (
       first &&
       second &&
@@ -53,17 +53,27 @@ export class NetworkDomain<T> {
       first.connectionIds.push(second.id);
     }
     this.nodes.setValue([...n]);
+    this.connections.transformValue((old) => [
+      ...old,
+      { idStart: idStart, idEnd: idEnd, value: value },
+    ]);
   }
 
-  removeConnection(id1: string, id2: string) {
+  removeConnection(idStart: string, idEnd: string) {
     const n = this.nodes.getValue();
-    const first = n.find((v) => v.id === id1);
-    const second = n.find((v) => v.id === id2);
+    const first = n.find((v) => v.id === idStart);
+    const second = n.find((v) => v.id === idEnd);
     if (first && second) {
-      first.connectionIds = first.connectionIds.filter((v) => v !== id2);
-      second.connectionIds = second.connectionIds.filter((v) => v !== id1);
+      first.connectionIds = first.connectionIds.filter((v) => v !== idEnd);
+      second.connectionIds = second.connectionIds.filter((v) => v !== idStart);
     }
     this.nodes.setValue([...n]);
+    this.connections.transformValue((old) =>
+      old.filter(
+        (connection) =>
+          connection.idStart !== idStart || connection.idEnd !== idEnd
+      )
+    );
   }
 
   dispose() {

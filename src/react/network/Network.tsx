@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import NetworkDomainProvider, {
   useNetworkDomain,
 } from "../../providers/network_domain_provider";
@@ -25,50 +25,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface NetworkProps<T> {
-  render?: (val: T) => JSX.Element;
+interface NetworkProps<TNode, TConnection> {
+  renderNode?: (val: TNode) => JSX.Element;
+  renderConnection?: (
+    val: TConnection,
+    idStart: string,
+    idEnd: string
+  ) => JSX.Element;
   children?: React.ReactNode;
-  domain?: NetworkDomain<T>;
+  domain?: NetworkDomain<TNode, TConnection>;
 }
 
-function NetworkContents<T>({ children, render }: NetworkProps<T>) {
+function NetworkContents<TNode, TConnection>({
+  children,
+  renderNode,
+  renderConnection,
+}: NetworkProps<TNode, TConnection>) {
   const domain = useNetworkDomain();
   const message = useAsyncValue(domain.instructionText);
-  const networkNodes = useAsyncValue(domain.nodes);
   const styles = useStyles();
   const nodes = useAsyncValue(domain.nodes);
+  const connections = useAsyncValue(domain.connections);
 
   return (
     <Canvas>
       {nodes.map((node, index) => (
         <Draggable id={node.id} key={index}>
-          {render ? render(node.value) : defaultRender(node.id)}
+          {renderNode ? renderNode(node.value) : defaultNodeRender(node.id)}
         </Draggable>
       ))}
+      {connections.map((connection) => {
+        if (renderConnection) {
+          return renderConnection(
+            connection.value,
+            connection.idStart,
+            connection.idEnd
+          );
+        } else return null;
+      })}
       <svg
         width="100%"
         height="100%"
         preserveAspectRatio="none"
         style={{ backgroundColor: "rgba(0,0,0,0)" }}
       >
-        {networkNodes.map((node, index) => {
-          return node.connectionIds.map((connectionId) => {
-            const connectionNode = networkNodes.find(
-              (n) => n.id === connectionId
-            );
-            if (connectionNode)
-              return (
-                <Connection
-                  key={node.id + "-" + connectionNode.id + "-" + index}
-                  idFirst={node.id}
-                  idSecond={connectionNode.id}
-                  showDirection
-                />
-              );
-
-            return null;
-          });
-        })}
+        {connections.map((connection, index) =>
+          defaultConnectionRender(connection.idStart, connection.idEnd)
+        )}
       </svg>
       {children}
       <div style={styles.message}>{message}</div>
@@ -76,14 +79,33 @@ function NetworkContents<T>({ children, render }: NetworkProps<T>) {
   );
 }
 
-const defaultRender = (id: string) => (
+const defaultNodeRender = (id: string) => (
   <DefaultNodeView label="Default Render" id={id} key={getRandomId()} />
 );
 
-export function Network<T>({ children, render, domain }: NetworkProps<T>) {
+const defaultConnectionRender = (idFirst: string, idSecond: string) => (
+  <Connection
+    idFirst={idFirst}
+    idSecond={idSecond}
+    key={getRandomId()}
+    showDirection
+  />
+);
+
+export function Network<TNode, TConnection>({
+  children,
+  renderNode,
+  renderConnection,
+  domain,
+}: NetworkProps<TNode, TConnection>) {
   return (
     <NetworkDomainProvider customDomain={domain}>
-      <NetworkContents render={render}>{children}</NetworkContents>
+      <NetworkContents
+        renderConnection={renderConnection}
+        renderNode={renderNode}
+      >
+        {children}
+      </NetworkContents>
     </NetworkDomainProvider>
   );
 }

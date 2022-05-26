@@ -4,11 +4,11 @@ import { CreateChoiceAction, EditorAction } from "./editor_action";
 import { Moment, Choice } from "./types";
 
 export class AdventureEditorDomain {
-  private networkDomain: NetworkDomain<Moment>;
+  private networkDomain: NetworkDomain<Moment, Choice>;
   moments: ObservableValue<Moment[]>;
   private curAction: EditorAction | null;
 
-  constructor(networkDomain: NetworkDomain<Moment>) {
+  constructor(networkDomain: NetworkDomain<Moment, Choice>) {
     this.networkDomain = networkDomain;
     this.moments = new ObservableValue<Moment[]>([]);
     this.curAction = null;
@@ -32,9 +32,9 @@ export class AdventureEditorDomain {
   addChoice(momentId: string, choice: Choice) {
     const curMoments = this.moments.getValue();
     const moment = curMoments.find((moment) => moment.id === momentId);
-    if (moment && moment.id != choice.momentId) {
+    if (moment && moment.id !== choice.momentId) {
       moment.choices = [...moment.choices, choice];
-      this.networkDomain.addConnection(momentId, choice.momentId);
+      this.networkDomain.addConnection(momentId, choice.momentId, choice);
       this.moments.setValue(this.moments.getValue());
     }
   }
