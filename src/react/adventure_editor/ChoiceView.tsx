@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useCanvasDomain } from "../../providers/canvas_domain_provider";
 import { useAsyncValue } from "../../common/hooks/use_async_value";
 import { Choice } from "../../domain/adventure_domain/types";
 import { makeStyles } from "../../common/hooks/make_styles";
+import { ChoiceMenu } from "./ChoiceMenu";
+import { useAdventureEditorDomain } from "../../providers/adventure_editor_domain_provider";
+import { clsx } from "../../common/styles/clsx";
+import { useNetworkDomain } from "../../providers/network_domain_provider";
 
 interface ChoiceViewProps {
   idFirst: string;
@@ -27,18 +31,32 @@ export const renderChoiceView = (
 
 const useStyles = makeStyles((theme) => ({
   description: {
+    color: theme.palette.text,
     position: "absolute",
     padding: theme.spacing(1),
     maxWidth: "325px",
     minWidth: "150px",
     fontSize: "18px",
     backgroundColor: theme.palette.secondary,
+    cursor: "pointer",
+  },
+  textAreas: {
+    padding: theme.spacing(1),
+    maxWidth: "325px",
+    minWidth: "150px",
+    color: theme.palette.text,
+  },
+  title: {
+    fontSize: "24px",
+    backgroundColor: theme.palette.primary,
   },
 }));
 
 export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
   const styles = useStyles();
   const domain = useCanvasDomain();
+  const networkDomain = useNetworkDomain();
+  const adventureDomain = useAdventureEditorDomain();
   const draggables = useAsyncValue(domain.draggableComponents);
   const first = draggables.find((d) => d.id === idFirst);
   const second = draggables.find((d) => d.id === idSecond);
@@ -58,12 +76,53 @@ export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
   const xPos =
     (firstX + secondX) / 2 - (contentRef.current?.scrollWidth ?? 0) / 2;
 
+  const [isEdit, setIsEdit] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div
       ref={contentRef}
       style={{ ...styles.description, top: yPos, left: xPos }}
+      onClick={(e) => {
+        e.preventDefault();
+        setMenuOpen(isEdit || !menuOpen);
+      }}
     >
-      {choice.description}
+      {isEdit ? (
+        <EditView idFirst={idFirst} idSecond={idSecond} choice={choice} />
+      ) : (
+        <div>{choice.description}</div>
+      )}
+      <ChoiceMenu
+        isEdit={isEdit}
+        isOpen={menuOpen}
+        onEdit={() => setIsEdit(true)}
+        onDelete={() => {
+          networkDomain.removeConnection(idFirst, idSecond);
+          adventureDomain.removeChoice(idFirst, idSecond);
+        }}
+        onSaveEdit={() => {
+          setIsEdit(false);
+          setMenuOpen(false);
+        }}
+      />
     </div>
+  );
+};
+
+const EditView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
+  const styles = useStyles();
+  const domain = useAdventureEditorDomain();
+
+  return (
+    <>
+      <input
+        onChange={(e) => {
+          domain.setChoiceDescription(idFirst, idSecond, e.currentTarget.value);
+        }}
+        defaultValue={choice.description}
+        style={clsx(styles.textAreas, styles.title)}
+      />
+    </>
   );
 };

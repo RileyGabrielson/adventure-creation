@@ -18,11 +18,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     userSelect: "none",
+    color: theme.palette.text,
   },
   textAreas: {
     padding: theme.spacing(1),
     maxWidth: "325px",
     minWidth: "150px",
+    color: theme.palette.text,
   },
   title: {
     fontSize: "24px",

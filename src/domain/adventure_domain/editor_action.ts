@@ -1,14 +1,14 @@
 import { NetworkDomain } from "../network_domain/network_domain";
 import { AdventureEditorDomain } from "./adventure_editor_domain";
-import { Choice, Moment } from "./types";
+import { Choice, Moment, PositionedMoment } from "./types";
 
 export abstract class EditorAction {
   protected domain: AdventureEditorDomain;
-  protected networkDomain: NetworkDomain<Moment, Choice>;
+  protected networkDomain: NetworkDomain<PositionedMoment, Choice>;
 
   constructor(
     domain: AdventureEditorDomain,
-    network: NetworkDomain<Moment, Choice>
+    network: NetworkDomain<PositionedMoment, Choice>
   ) {
     this.domain = domain;
     this.networkDomain = network;

@@ -5,7 +5,7 @@ import { makeStyles } from "../../common/hooks/make_styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: theme.borderRadius,
-    backgroundColor: theme.palette.secondary,
+    backgroundColor: theme.palette.primary,
     padding: theme.spacing(1),
     color: theme.palette.text,
   },

@@ -1,3 +1,5 @@
+import { Vector2 } from "../canvas_domain";
+
 export type Flags = Record<string, boolean>;
 
 export interface Choice {
@@ -11,4 +13,8 @@ export interface Moment {
   title: string;
   description: string;
   choices: Choice[];
+}
+
+export interface PositionedMoment extends Moment {
+  position: Vector2;
 }

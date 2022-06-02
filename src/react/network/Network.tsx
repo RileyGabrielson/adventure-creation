@@ -50,7 +50,7 @@ function NetworkContents<TNode, TConnection>({
   return (
     <Canvas>
       {nodes.map((node, index) => (
-        <Draggable id={node.id} key={index}>
+        <Draggable id={node.id} key={index} initialPos={node.initialPosition}>
           {renderNode ? renderNode(node.value) : defaultNodeRender(node.id)}
         </Draggable>
       ))}

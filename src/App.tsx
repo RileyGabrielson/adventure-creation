@@ -4,8 +4,9 @@ import { AdventureEditor } from "./react/adventure/AdventureEditor";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: "#282c34",
+    backgroundColor: theme.palette.background.page,
     minHeight: "100vh",
+    minWidth: "100vw",
     fontSize: "calc(10px + 2vmin)",
   },
 }));

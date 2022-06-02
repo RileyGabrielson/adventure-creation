@@ -20,12 +20,12 @@ export const defaultSpacing: Spacing = (
 
 export const defaultTheme: Theme = {
   palette: {
-    primary: "#72DE92",
-    secondary: "#277D8E",
+    primary: "#6B4E71",
+    secondary: "#53687E",
     text: "#fff",
     background: {
-      page: "#0A1E59",
-      panel: "#174974",
+      page: "#3A4454",
+      panel: "#C2B2B4",
     },
   },
   spacing: defaultSpacing,

@@ -2,8 +2,6 @@ import React from "react";
 import { Button } from "../common/Button";
 import { makeStyledTransition } from "react-motion-ux";
 import { makeStyles } from "../../common/hooks/make_styles";
-import { useAdventureEditorDomain } from "../../providers/adventure_editor_domain_provider";
-import { Moment } from "../../domain/adventure_domain/types";
 
 const useStyles = makeStyles((theme) => ({
   menu: {
@@ -20,13 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface MomentMenuProps {
+interface ChoiceMenuProps {
   onClose?: () => void;
   onEdit?: () => void;
   isOpen?: boolean;
   isEdit?: boolean;
+  onDelete?: () => void;
   onSaveEdit?: () => void;
-  moment: Moment;
 }
 
 const useStyledTransition = makeStyledTransition<HTMLDivElement>(
@@ -51,15 +49,14 @@ const useStyledTransition = makeStyledTransition<HTMLDivElement>(
   300
 );
 
-export const MomentMenu = ({
+export const ChoiceMenu = ({
   onEdit,
   onClose,
+  onDelete,
   isOpen,
   isEdit,
   onSaveEdit,
-  moment,
-}: MomentMenuProps) => {
-  const domain = useAdventureEditorDomain();
+}: ChoiceMenuProps) => {
   const ref = useStyledTransition(isOpen ? "visible" : "hidden");
   const styles = useStyles();
 
@@ -77,12 +74,11 @@ export const MomentMenu = ({
           </Button>
           <Button
             onClick={(e) => {
-              domain.startCreateChoice(moment);
-              onClose && onClose();
+              onDelete && onDelete();
               e.stopPropagation();
             }}
           >
-            Create Connection
+            Delete
           </Button>
         </>
       ) : (

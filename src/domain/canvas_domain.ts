@@ -18,10 +18,12 @@ export interface Draggable {
 export class CanvasDomain {
   draggableComponents: ObservableValue<Draggable[]>;
   mouseOffset: Vector2;
+  maxDimensions: ObservableValue<Vector2>;
 
   constructor() {
     this.draggableComponents = new ObservableValue<Draggable[]>([]);
     this.mouseOffset = { x: 0, y: 0 };
+    this.maxDimensions = new ObservableValue<Vector2>({ x: 0, y: 0 });
   }
 
   registerDraggable(
@@ -92,6 +94,18 @@ export class CanvasDomain {
       y: mousePosition.y - this.mouseOffset.y,
     };
     this.draggableComponents.setValue([...this.draggableComponents.getValue()]);
+  }
+
+  increaseXSize(amount: number) {
+    const dim = this.maxDimensions.getValue();
+    dim.x += amount;
+    this.maxDimensions.setValue(dim);
+  }
+
+  increaseYSize(amount: number) {
+    const dim = this.maxDimensions.getValue();
+    dim.y += amount;
+    this.maxDimensions.setValue(dim);
   }
 
   setPosition(id: string, position: Vector2) {

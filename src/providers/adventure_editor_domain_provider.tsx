@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import makeContextHook from "../common/hooks/make_context_hook";
 import { AdventureEditorDomain } from "../domain/adventure_domain/adventure_editor_domain";
-import { Choice, Moment } from "../domain/adventure_domain/types";
+import { Choice, PositionedMoment } from "../domain/adventure_domain/types";
 import { NetworkDomain } from "../domain/network_domain/network_domain";
 
 const adventureEditorDomainContext = createContext<
@@ -14,7 +14,7 @@ export const useAdventureEditorDomain = makeContextHook(
 
 interface AdventureEditorProviderProps {
   children: React.ReactNode;
-  networkDomain: NetworkDomain<Moment, Choice>;
+  networkDomain: NetworkDomain<PositionedMoment, Choice>;
 }
 
 const AdventureEditorDomainProvider = ({

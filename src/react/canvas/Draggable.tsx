@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 export interface DraggableProps {
   children: React.ReactNode;
   id: string;
-  initialPos?: { x: number; y: number };
+  initialPos: { x: number; y: number };
 }
 
 export const Draggable = ({ children, initialPos, id }: DraggableProps) => {
@@ -27,7 +27,7 @@ export const Draggable = ({ children, initialPos, id }: DraggableProps) => {
   useEffect(() => {
     const drag = {
       id: id,
-      position: { ...(initialPos ?? { x: 0, y: 0 }) },
+      position: initialPos,
       ref: ref,
     };
     domain.registerDraggable(drag);

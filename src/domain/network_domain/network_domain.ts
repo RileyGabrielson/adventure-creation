@@ -1,13 +1,15 @@
 import { ObservableValue } from "../../common/hex/observable_value";
+import { Vector2 } from "../canvas_domain";
 
 export interface NetworkNode<TNode> {
   id: string;
   label: string;
   connectionIds: string[];
   value: TNode;
+  initialPosition: Vector2;
 }
 
-interface Connection<TConnection> {
+export interface Connection<TConnection> {
   value: TConnection;
   idStart: string;
   idEnd: string;
@@ -39,6 +41,7 @@ export class NetworkDomain<TNode, TConnection> {
         (connectionId) => connectionId !== id
       );
     });
+    this.nodes.setValue(curNodes);
   }
 
   addConnection(idStart: string, idEnd: string, value: TConnection) {
