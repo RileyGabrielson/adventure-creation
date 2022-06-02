@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "./common/hooks/make_styles";
-import { AdventureEditor } from "./react/adventure/AdventureEditor";
+import { AdventureEditor } from "./react/adventure_editor/AdventureEditor";
 
 const useStyles = makeStyles((theme) => ({
   root: {
