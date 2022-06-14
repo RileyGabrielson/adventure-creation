@@ -3,7 +3,6 @@
 A simple visual interface for creating 'Choose Your Own Adventure' styles data structures. Written in React typescript.
 
 
-
 ## Project Goals
 
 ### Single Responsibility
@@ -15,10 +14,18 @@ In the spirit of reusability, a major goal of this project was to create compone
 An overarching goal of this project was to use as few dependencies as possible, and to create custom solutions for theme, an observable pattern, hexagonal architecture, and react context. Besides environment dependencies such as jest, react, and node, the only 3rd party dependency is react-motion-ux, a css animation library. See package.json for a full list of dependencies.
 
 
-
 ## Available Scripts
 
 In the project directory, you can run:
+
+### Quick Start
+
+To run this application, first build the node modules, then run the app:
+
+```
+npm install
+npm start
+```
 
 ### `npm start`
 
