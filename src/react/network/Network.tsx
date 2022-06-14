@@ -45,7 +45,7 @@ function NetworkContents<TNode, TConnection>({
   const message = useAsyncValue(domain.instructionText);
   const styles = useStyles();
   const nodes = useAsyncValue(domain.nodes);
-  const connections = useAsyncValue(domain.connections);
+  const connections = useAsyncValue(domain.edges);
 
   return (
     <Canvas>

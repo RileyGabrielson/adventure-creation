@@ -85,14 +85,20 @@ const EditView = ({ moment }: MomentViewProps) => {
     <>
       <input
         onChange={(e) => {
-          domain.setMomentTitle(moment.id, e.currentTarget.value);
+          domain.adventureDomain.setMomentTitle(
+            moment.id,
+            e.currentTarget.value
+          );
         }}
         defaultValue={moment.title}
         style={clsx(styles.textAreas, styles.title)}
       />
       <input
         onChange={(e) => {
-          domain.setMomentDescription(moment.id, e.currentTarget.value);
+          domain.adventureDomain.setMomentDescription(
+            moment.id,
+            e.currentTarget.value
+          );
         }}
         defaultValue={moment.description}
         style={clsx(styles.textAreas, styles.title)}

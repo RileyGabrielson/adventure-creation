@@ -1,8 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useLayoutEffect, useState } from "react";
 import makeContextHook from "../common/hooks/make_context_hook";
 import { AdventureEditorDomain } from "../domain/adventure_domain/adventure_editor_domain";
 import { Choice, PositionedMoment } from "../domain/adventure_domain/types";
 import { NetworkDomain } from "../domain/network_domain/network_domain";
+import { useAdventureDomain } from "./adventure_domain_provider";
 
 const adventureEditorDomainContext = createContext<
   AdventureEditorDomain | undefined
@@ -21,9 +22,14 @@ const AdventureEditorDomainProvider = ({
   children,
   networkDomain,
 }: AdventureEditorProviderProps) => {
-  const [domain] = useState(() => new AdventureEditorDomain(networkDomain));
+  const adventureDomain = useAdventureDomain();
+  const [domain, setDomain] = useState(
+    () => new AdventureEditorDomain(adventureDomain, networkDomain)
+  );
 
-  useEffect(() => () => domain.dispose(), [domain]);
+  useLayoutEffect(() => {
+    setDomain(() => new AdventureEditorDomain(adventureDomain, networkDomain));
+  }, [adventureDomain, networkDomain]);
 
   return (
     <adventureEditorDomainContext.Provider value={domain}>

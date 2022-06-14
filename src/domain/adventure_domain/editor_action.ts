@@ -27,6 +27,8 @@ export class CreateChoiceAction extends EditorAction {
       this.domain.addChoice(this.startingNodeId, {
         momentId: moment.id,
         description: "mock description",
+        requiredFlags: [],
+        flagsToAdd: [],
       });
       this.domain.clearCurAction();
     }

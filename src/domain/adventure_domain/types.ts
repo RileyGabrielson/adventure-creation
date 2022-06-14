@@ -5,7 +5,8 @@ export type Flags = Record<string, boolean>;
 export interface Choice {
   momentId: string;
   description: string;
-  requiredFlagsForVisible?: string[];
+  requiredFlags: string[];
+  flagsToAdd: string[];
 }
 
 export interface Moment {

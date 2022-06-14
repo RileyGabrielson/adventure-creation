@@ -17,12 +17,12 @@ export interface Connection<TConnection> {
 
 export class NetworkDomain<TNode, TConnection> {
   public nodes: ObservableValue<NetworkNode<TNode>[]>;
-  public connections: ObservableValue<Connection<TConnection>[]>;
+  public edges: ObservableValue<Connection<TConnection>[]>;
   public instructionText: ObservableValue<string | null>;
 
   constructor() {
     this.nodes = new ObservableValue<NetworkNode<TNode>[]>([]);
-    this.connections = new ObservableValue<Connection<TConnection>[]>([]);
+    this.edges = new ObservableValue<Connection<TConnection>[]>([]);
     this.instructionText = new ObservableValue<string | null>(null);
   }
 
@@ -56,7 +56,7 @@ export class NetworkDomain<TNode, TConnection> {
       first.connectionIds.push(second.id);
     }
     this.nodes.setValue([...n]);
-    this.connections.transformValue((old) => [
+    this.edges.transformValue((old) => [
       ...old,
       { idStart: idStart, idEnd: idEnd, value: value },
     ]);
@@ -71,7 +71,7 @@ export class NetworkDomain<TNode, TConnection> {
       second.connectionIds = second.connectionIds.filter((v) => v !== idStart);
     }
     this.nodes.setValue([...n]);
-    this.connections.transformValue((old) =>
+    this.edges.transformValue((old) =>
       old.filter(
         (connection) =>
           connection.idStart !== idStart || connection.idEnd !== idEnd

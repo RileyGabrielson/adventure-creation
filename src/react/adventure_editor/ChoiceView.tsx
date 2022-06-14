@@ -52,11 +52,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const multipleConnectionsOffset = { x: 20, y: 15 };
+
 export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
   const styles = useStyles();
   const domain = useCanvasDomain();
   const networkDomain = useNetworkDomain();
-  const adventureDomain = useAdventureEditorDomain();
+  const adventureEditorDomain = useAdventureEditorDomain();
+  const moments = useAsyncValue(adventureEditorDomain.adventureDomain.moments);
   const draggables = useAsyncValue(domain.draggableComponents);
   const first = draggables.find((d) => d.id === idFirst);
   const second = draggables.find((d) => d.id === idSecond);
@@ -71,8 +74,7 @@ export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
 
   const contentRef = useRef<HTMLDivElement | null>(null);
 
-  const yPos =
-    (firstY + secondY) / 2 - (contentRef.current?.scrollHeight ?? 0) / 2;
+  const yPos = (firstY + secondY) / 2;
   const xPos =
     (firstX + secondX) / 2 - (contentRef.current?.scrollWidth ?? 0) / 2;
 
@@ -91,7 +93,19 @@ export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
       {isEdit ? (
         <EditView idFirst={idFirst} idSecond={idSecond} choice={choice} />
       ) : (
-        <div>{choice.description}</div>
+        <>
+          <div>{choice.description}</div>
+          <div>
+            {choice.flagsToAdd.length > 0 && (
+              <div>State Additions: {choice.flagsToAdd.join(", ")}</div>
+            )}
+          </div>
+          <div>
+            {choice.requiredFlags.length > 0 && (
+              <div>Required Flags: {choice.requiredFlags.join(", ")}</div>
+            )}
+          </div>
+        </>
       )}
       <ChoiceMenu
         isEdit={isEdit}
@@ -99,7 +113,7 @@ export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
         onEdit={() => setIsEdit(true)}
         onDelete={() => {
           networkDomain.removeConnection(idFirst, idSecond);
-          adventureDomain.removeChoice(idFirst, idSecond);
+          adventureEditorDomain.adventureDomain.deleteChoice(idFirst, idSecond);
         }}
         onSaveEdit={() => {
           setIsEdit(false);
@@ -118,9 +132,35 @@ const EditView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
     <>
       <input
         onChange={(e) => {
-          domain.setChoiceDescription(idFirst, idSecond, e.currentTarget.value);
+          domain.adventureDomain.setChoiceDescription(
+            idFirst,
+            idSecond,
+            e.currentTarget.value
+          );
         }}
         defaultValue={choice.description}
+        style={clsx(styles.textAreas, styles.title)}
+      />
+      <input
+        onChange={(e) => {
+          domain.adventureDomain.setChoiceFlagAdditions(
+            idFirst,
+            idSecond,
+            e.currentTarget.value
+          );
+        }}
+        defaultValue={choice.flagsToAdd.join(", ")}
+        style={clsx(styles.textAreas, styles.title)}
+      />
+      <input
+        onChange={(e) => {
+          domain.adventureDomain.setChoiceFlagRequirements(
+            idFirst,
+            idSecond,
+            e.currentTarget.value
+          );
+        }}
+        defaultValue={choice.requiredFlags.join(", ")}
         style={clsx(styles.textAreas, styles.title)}
       />
     </>

@@ -1,6 +1,11 @@
 import React from "react";
 import { makeStyles } from "./common/hooks/make_styles";
+import { useAsyncValue } from "./common/hooks/use_async_value";
+import AdventureDomainProvider, {
+  useAdventureDomain,
+} from "./providers/adventure_domain_provider";
 import { AdventureEditor } from "./react/adventure_editor/AdventureEditor";
+import { AdventureViewer } from "./react/adventure_viewer/AdventureViewer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,11 +20,20 @@ function App() {
   const styles = useStyles();
   return (
     <div style={{ textAlign: "center" }}>
-      <header style={styles.root}>
-        <AdventureEditor />
-      </header>
+      <AdventureDomainProvider>
+        <header style={styles.root}>
+          <AppContents />
+        </header>
+      </AdventureDomainProvider>
     </div>
   );
 }
+
+const AppContents = () => {
+  const domain = useAdventureDomain();
+  const status = useAsyncValue(domain.activity);
+
+  return status === "Editing" ? <AdventureEditor /> : <AdventureViewer />;
+};
 
 export default App;

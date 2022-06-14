@@ -2,7 +2,6 @@
 
 A simple visual interface for creating 'Choose Your Own Adventure' styles data structures. Written in React typescript.
 
-
 ## Project Goals
 
 ### Single Responsibility
@@ -12,7 +11,6 @@ In the spirit of reusability, a major goal of this project was to create compone
 ### Dependencies
 
 An overarching goal of this project was to use as few dependencies as possible, and to create custom solutions for theme, an observable pattern, hexagonal architecture, and react context. Besides environment dependencies such as jest, react, and node, the only 3rd party dependency is react-motion-ux, a css animation library. See package.json for a full list of dependencies.
-
 
 ## Available Scripts
 
@@ -26,6 +24,12 @@ To run this application, first build the node modules, then run the app:
 npm install
 npm start
 ```
+
+Click the + button in the top bar to create new nodes.
+Right click on moments to edit or make new edges/choices.
+Left click on choices to edit or delete edges.
+
+If you would like to view your new adventure, make sure that one of the nodes has the keyword `(start)` in the title, then click on view.
 
 ### `npm start`
 
