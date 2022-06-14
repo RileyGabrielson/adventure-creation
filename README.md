@@ -1,6 +1,20 @@
-# Getting Started with Create React App
+# Adventure Creation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple visual interface for creating 'Choose Your Own Adventure' styles data structures. Written in React typescript.
+
+
+
+## Project Goals
+
+### Single Responsibility
+
+In the spirit of reusability, a major goal of this project was to create components that are responsible for exactly one thing. Each component is built to be as agnostic as possible, allowing for reuse with different data structures. Seperating the business logic into domains that the UI subscribes to even allows for the interface to be scrapped and replaced with a different UI framework, while keeping the same core domain logic.
+
+### Dependencies
+
+An overarching goal of this project was to use as few dependencies as possible, and to create custom solutions for theme, an observable pattern, hexagonal architecture, and react context. Besides environment dependencies such as jest, react, and node, the only 3rd party dependency is react-motion-ux, a css animation library. See package.json for a full list of dependencies.
+
+
 
 ## Available Scripts
 
@@ -38,9 +52,3 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
