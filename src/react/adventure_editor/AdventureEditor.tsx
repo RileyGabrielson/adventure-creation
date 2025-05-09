@@ -90,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text,
     backgroundColor: theme.palette.secondary,
     padding: theme.spacing(1),
+    marginLeft: theme.spacing(3),
     width: "200px",
     height: "25px",
     borderRadius: theme.spacing(1),

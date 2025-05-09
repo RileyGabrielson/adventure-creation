@@ -52,14 +52,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const multipleConnectionsOffset = { x: 20, y: 15 };
-
 export const ChoiceView = ({ idFirst, idSecond, choice }: ChoiceViewProps) => {
   const styles = useStyles();
   const domain = useCanvasDomain();
   const networkDomain = useNetworkDomain();
   const adventureEditorDomain = useAdventureEditorDomain();
-  const moments = useAsyncValue(adventureEditorDomain.adventureDomain.moments);
   const draggables = useAsyncValue(domain.draggableComponents);
   const first = draggables.find((d) => d.id === idFirst);
   const second = draggables.find((d) => d.id === idSecond);
